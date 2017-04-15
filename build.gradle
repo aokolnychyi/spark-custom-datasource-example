@@ -1,0 +1,46 @@
+plugins {
+    id 'idea'
+    id 'scala'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+group 'com.aokolnychyi'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+ext {
+    scalaVersion = '2.11.8'
+    sparkVersion = '2.1.0'
+}
+
+dependencies {
+    compile "org.apache.spark:spark-core_2.11:$sparkVersion"
+    compile "org.apache.spark:spark-sql_2.11:$sparkVersion"
+    compile "org.scala-lang:scala-library:$scalaVersion"
+}
+
+shadowJar {
+    zip64 true
+    dependencies {
+        exclude(dependency("org.apache.spark:.*"))
+        exclude(dependency("org.apache.hadoop:.*"))
+    }
+}
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala', 'src/main/java']
+        }
+        java {
+            srcDirs = []
+        }
+    }
+}
